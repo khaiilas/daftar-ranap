@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Online - RS Sehat Sejahtera</title>
+    
+    <!-- Font & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --text: #1f2937;
+            --gray: #9ca3af;
+            --light: #f3f4f6;
+            --white: #ffffff;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            padding-top: 76px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--white);
+            padding: 2rem 0;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            margin: 0;
+        }
+
+        /* Registration Section */
+        .registration-section {
+            padding: 3rem 0;
+        }
+
+        /* Progress Container */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--white);
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .step-text {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        /* Input Styling */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input.is-invalid {
+            border-color: #dc2626;
+        }
+
+        /* Service Cards */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .service-card {
+            position: relative;
+        }
+
+        .service-card input {
+            display: none;
+        }
+
+        .service-card label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .service-card i {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card input:checked + label {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .service-card input:checked + label i {
+            color: var(--primary);
+        }
+        
+        /*auransi*/
+        .asuransi-grid label {
+            display: flex;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        label input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        label span:before {
+            display: flex;
+            flex-shrink: 0;
+            background-color: #fff;
+            content: '';
+            box-shadow: inset 0 0 0 0.125em #1d4ed8;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            margin-right: 0.375em;
+        }
+
+        label span{
+            display: flex;
+            align-items: center;
+            padding: 0.375em 0.75em 0.375em 0.375em;
+        }
+
+        label input:checked+span:before{
+            box-shadow: inset 0 0 0 0.4375em #1d4ed8;  
+        }
+
+        label span:hover{
+            background-color: #e5e7eb;
+        }
+
+        /* Time Slots */
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .time-slot.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn-prev, .btn-next {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-next:hover {
+            background: #1d4ed8;
+        }
+
+        /* Success Modal */
+        .success-icon {
+            font-size: 3rem;
+            color: var(--success);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .progress-container {
+                margin-bottom: 2rem;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .service-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Minimalis -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">RS Sehat Sejahtera</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Beranda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="pendaftaran.html">Pendaftaran</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="fasilitas.html">Fasilitas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header Section -->
+<section class="page-header">
+    <div class="container">
+        <div class="row py-5">
+            <div class="col-12 text-center">
+                <h1>Pendaftaran Online</h1>
+                <p>Daftar di mana saja dengan mudah dan cepat</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Form Pendaftaran -->
+<section class="registration-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Progress Steps -->
+                <div class="progress-container">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-text">Data Diri</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-text">Pilih Layanan</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-text">Jadwal</span>
+                    </div>
+                </div>
+
+                <!-- Form Container -->
+                <div class="form-container">
+                    <form id="registrationForm" novalidate>
+                        <!-- Step 1: Data Diri -->
+                        <div class="form-step active" data-step="1">
+                            <div class="input-group">
+                                <label for="fullName">Nama Lengkap</label>
+                                <input type="text" id="fullName" name="fullName" class="form-input" required>
+                                <div class="invalid-feedback">Nama lengkap harus diisi</div>
+                            </div>
+                            <div class="input-group">
+                                <label for="nik">NIK</label>
+                                <input type="text" id="nik" name="nik" class="form-input" required maxlength="16">
+                                <div class="invalid-feedback">NIK harus 16 digit</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <label for="birthDate">Tanggal Lahir</label>
+                                        <input type="date" id="birthDate" name="birthDate" class="form-input" required>
+                                        <div class="invalid-feedback">Pilih tanggal lahir</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <label for="gender">Jenis Kelamin</label>
+                                        <select id="gender" name="gender" class="form-input" required>
+                                            <option value="">Pilih</option>
+                                            <option value="L">Laki-laki</option>
+                                            <option value="P">Perempuan</option>
+                                        </select>
+                                        <div class="invalid-feedback">Pilih jenis kelamin</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="phone">Nomor HP</label>
+                                <input type="tel" id="phone" name="phone" class="form-input" required>
+                                <div class="invalid-feedback">Nomor HP tidak valid</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Pilih Layanan -->
+                        <div class="form-step" data-step="2">
+                            <div class="service-cards">
+                                <div class="service-card">
+                                    <input type="radio" name="service" id="rawat-inap" value="inap" required>
+                                    <label for="rawat-inap">
+                                        <i class="fas fa-stethoscope"></i>
+                                        <span>Rawat Inap</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback text-center">Pilih salah satu layanan</div>
+                        </div>
+
+                        <!-- Step 3: Jadwal -->
+                        <div class="form-step" data-step="3">
+                            <div class="input-group">
+                                <label for="appointmentDate">Pilih Tanggal</label>
+                                <input type="date" id="appointmentDate" name="appointmentDate" class="form-input" required>
+                                <div class="invalid-feedback">Pilih tanggal konsultasi</div>
+                            </div>
+                            <div class="asuransi">
+                                <label>Jenis Asuransi</label>
+                                <div class="asuransi-grid">
+                                    <label>
+                                        <input type="radio" name="asuransi" value="Pasien Umum">
+                                        <span>Pasien Umum</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="asuransi" value="BPJS Kesehatan">
+                                        <span>BPJS Kesehatan</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="asuransi" value="BPJS Ketenagakerjaan">
+                                        <span>BPJS Ketenagakerjaan</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="asuransi" value="Asuransi">
+                                        <span>Asuransi</span>
+                                    </label>
+                                    <div class="invalid-feedback">Pilih jenis asuransi</div>
+                                </div>
+                            </div>     
+                            <div class="kamar">
+                                <label>Jenis Kamar</label>
+                                <div class="kamar-grid">
+                                    <label>
+                                        <input type="radio" name="kamar" value="VVIP">
+                                        <span>VVIP</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="kamar" value="VIP">
+                                        <span>VIP</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="kamar" value="Kelas 1">
+                                        <span>Kelas 1</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="kamar" value=Kelas 2">
+                                        <span>Kelas 2</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="kamar" value="Kelas 3">
+                                        <span>Kelas 3</span>
+                                    </label>
+                                    <div class="invalid-feedback">Pilih jenis kamar</div>
+                                </div>
+                            </div>         
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="form-navigation">
+                            <button type="button" id="prevBtn" class="btn-prev">Kembali</button>
+                            <button type="button" id="nextBtn" class="btn-next">Lanjut</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-check-circle success-icon mb-3"></i>
+                <h4>Pendaftaran Berhasil!</h4>
+                <p>Nomor pendaftaran Anda: <strong id="registrationNumber"></strong><br>
+                   Silahkan simpan atau catat nomor pendaftaran.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    const steps = document.querySelectorAll('.form-step');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const timeSlots = document.querySelectorAll('.time-slot');
+    const selectedTimeInput = document.getElementById('selectedTime');
+    const radioButtons = document.querySelectorAll('input[name="radio"]');
+    const kamarRadio = document.querySelector('input[name="kamar"]:checked');
+    let currentStep = 1;
+
+    // Fungsi untuk validasi setiap langkah
+    function validateStep(step) {
+        const currentStepEl = document.querySelector(`.form-step[data-step="${step}"]`);
+        let isValid = true;
+
+        // Reset semua pesan error
+        currentStepEl.querySelectorAll('.invalid-feedback').forEach(feedback => {
+            feedback.style.display = 'none';
+        });
+
+        // Validasi Step 1: Data Diri
+        if (step === 1) {
+            const fullName = document.getElementById('fullName');
+            const nik = document.getElementById('nik');
+            const birthDate = document.getElementById('birthDate');
+            const gender = document.getElementById('gender');
+            const phone = document.getElementById('phone');
+
+            if (!fullName.value.trim()) {
+                fullName.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!nik.value.trim() || nik.value.length !== 16) {
+                nik.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!birthDate.value) {
+                birthDate.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!gender.value) {
+                gender.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!phone.value.trim() || phone.value.length < 10) {
+                phone.classList.add('is-invalid');
+                isValid = false;
+            }
+        }
+
+        // Validasi Step 2: Pilih Layanan
+        if (step === 2) {
+            const serviceSelected = currentStepEl.querySelector('input[name="service"]:checked');
+            if (!serviceSelected) {
+                currentStepEl.querySelector('.invalid-feedback').style.display = 'block';
+                isValid = false;
+            }
+        }
+
+        // Validasi Step 3: Jadwal
+        if (step === 3) {
+            const appointmentDate = document.getElementById('appointmentDate');
+            const selectedTime = document.querySelector('.time-slot.selected');
+            const selectedRadio = document.querySelector('input[name="radio"]:checked');
+            const kamarRadio = document.querySelector('input[name="kamar"]:checked');
+            const invalidFeedbackAsuransi = document.querySelector('.asuransi-grid .invalid-feedback');
+            const invalidFeedbackKamar = document.querySelector('.kamar-grid .invalid-feedback');
+            let isValid = true;     
+
+            if (!appointmentDate.value) {
+                appointmentDate.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                appointmentDate.classList.remove('is-invalid');
+            }
+
+            if (!selectedRadio) {
+                invalidFeedbackAsuransi.style.display = 'block'; 
+                isValid = false;
+            } else {
+                invalidFeedbackAsuransi.style.display = 'none'; 
+            }
+
+            if (!kamarRadio) {
+                invalidFeedbackKamar.style.display = 'block'; 
+                isValid = false;
+            } else {
+                invalidFeedbackKamar.style.display = 'none'; 
+            }
+            return isValid;
+        }
+        return isValid;
+    }
+
+    // Event listener untuk time slots
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            timeSlots.forEach(s => s.classList.remove('selected'));
+            slot.classList.add('selected');
+            selectedTimeInput.value = slot.dataset.time;
+        });
+    });
+
+    // Event listener untuk input fields
+    form.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.remove('is-invalid');
+            const feedback = input.parentElement.querySelector('.invalid-feedback');
+            if (feedback) feedback.style.display = 'none';
+        });
+    });
+
+    // Event listener untuk radio buttons
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const feedback = radio.closest('.form-step').querySelector('.invalid-feedback');
+            if (feedback) feedback.style.display = 'none';
+        });
+    });
+
+    // Navigation
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            updateStep(currentStep);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (validateStep(currentStep)) {
+            if (currentStep < 3) {
+                currentStep++;
+                updateStep(currentStep);
+            } else {
+                handleSubmit();
+            }
+        }
+    });
+
+    function updateStep(step) {
+        steps.forEach(s => s.classList.remove('active'));
+        progressSteps.forEach(s => s.classList.remove('active'));
+        
+        document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+        
+        // Update progress steps
+        for (let i = 1; i <= step; i++) {
+            document.querySelector(`.progress-step[data-step="${i}"]`).classList.add('active');
+        }
+        
+        prevBtn.style.display = step === 1 ? 'none' : 'block';
+        nextBtn.textContent = step === 3 ? 'Selesai' : 'Lanjut';
+    }
+
+    function handleSubmit() {
+        const regNumber = 'REG' + Date.now().toString().slice(-6);
+        document.getElementById('registrationNumber').textContent = regNumber;
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+        
+        form.reset();
+        timeSlots.forEach(slot => slot.classList.remove('selected'));
+        currentStep = 1;
+        updateStep(1);
+    }
+
+    // Inisialisasi
+    updateStep(1);
+});
+</script>
+
+</body>
+</html>

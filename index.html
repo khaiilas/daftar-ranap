@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Sehat Sejahtera</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">RS Sehat Sejahtera</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="fasilitas.html">Fasilitas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pendaftaran.html">Pendaftaran</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Kesehatan Anda Prioritas Kami</h1>
+                <p class="hero-subtitle">Pelayanan kesehatan terpercaya dengan dokter dan fasilitas terbaik.</p>
+                <a href="pendaftaran.html" class="btn btn-primary">Daftar Sekarang</a>
+            </div>
+            <div class="hero-image">
+                <img src="foto/rs.jpg" alt="Ilustrasi Kesehatan" class="img-fluid">
+            </div>
+        </div>
+    </section>    
+
+    <!-- Chatbot -->
+    <div id="chatbot" class="chatbot">
+        <div class="chatbot-header">
+            <h5>Chat</h5>
+            <button id="closeChat" class="close-chat">✖</button>
+        </div>
+        <div class="chatbot-body">
+            <div id="chatContent" class="chat-content"></div>
+            <input id="userInput" type="text" placeholder="Ketik pesan..." class="chat-input">
+        </div>
+    </div>
+
+    <!-- Tombol untuk membuka chatbot -->
+    <button id="openChat" class="chatbot-button">💬</button>
+
+    <!-- Footer -->
+    <footer class="bg-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">RS Sehat Sejahtera</h5>
+                    <p class="text-muted">Melayani dengan sepenuh hati untuk kesehatan yang lebih baik.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Kontak</h5>
+                    <p class="text-muted">
+                        <i class="fas fa-phone me-2"></i> (021) 555-0123<br>
+                        <i class="fas fa-envelope me-2"></i> info@rssehat.com
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openChat = document.getElementById('openChat');
+            const closeChat = document.getElementById('closeChat');
+            const chatbot = document.getElementById('chatbot');
+            const chatContent = document.getElementById('chatContent');
+            const userInput = document.getElementById('userInput');
+    
+            // Buka chatbot
+            openChat.addEventListener('click', () => {
+                chatbot.style.display = 'flex';
+                openChat.style.display = 'none';
+            });
+    
+            // Tutup chatbot
+            closeChat.addEventListener('click', () => {
+                chatbot.style.display = 'none';
+                openChat.style.display = 'block';
+            });
+    
+            // Kirim pesan pengguna
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && userInput.value.trim() !== '') {
+                    const userMessage = userInput.value;
+                    appendMessage('user', userMessage);
+                    userInput.value = '';
+                    getAIResponse(userMessage);
+                }
+            });
+    
+            // Tambahkan pesan ke chat
+            function appendMessage(sender, message) {
+                const messageEl = document.createElement('div');
+                messageEl.textContent = message;
+                messageEl.className = sender === 'user' ? 'user-message' : 'ai-message';
+                chatContent.appendChild(messageEl);
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }
+    
+            // AI Response Logic
+            function getAIResponse(userMessage) {
+                let response = '';
+    
+                // Respon berdasarkan input
+                if (userMessage.toLowerCase().includes('siang')) {
+                    response = 'selamat siang, ada yang bisa dibantu?';
+                } else if (userMessage.toLowerCase().includes('kontak')) {
+                    response = 'Kontak kami: (021) 555-0123 atau email info@rssehat.com.';
+                } else {
+                    response = 'Maaf, saya tidak memahami pertanyaan Anda. Silakan hubungi staf kami.';
+                }
+    
+                setTimeout(() => appendMessage('ai', response), 500);
+            }
+        });
+    </script>    
+</body>
+</html>
